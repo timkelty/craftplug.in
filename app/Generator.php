@@ -2,7 +2,8 @@
 
 class Generator {
 
-	private $_vars = array();
+	private $_vars     = array();
+	private $_options  = array();
 	private $_settings = array();
 
 	public function __construct()
@@ -13,19 +14,26 @@ class Generator {
 	public function go()
 	{
 		$this->_vars = array(
-			'_basename_'  => filter_input(INPUT_POST, 'pluginName'),
-			'_version_'   => filter_input(INPUT_POST, 'pluginVersion'),
-			'_developer_' => filter_input(INPUT_POST, 'pluginAuthor'),
-			'_url_'       => filter_input(INPUT_POST, 'pluginUrl')
+			'basename'  => filter_input(INPUT_POST, 'pluginName'),
+			'version'   => filter_input(INPUT_POST, 'pluginVersion'),
+			'developer' => filter_input(INPUT_POST, 'pluginAuthor'),
+			'url'       => filter_input(INPUT_POST, 'pluginUrl')
 		);
 
-		$this->_settings = array(
+		$this->_options = array(
 			'hasControllers'  => true,
 			'hasServices'     => true,
 			'hasVariables'    => true,
 			'hasFieldTypes'   => true,
 			'hasCpSection'    => true,
 			'includeComments' => true
+		);
+
+		$this->_settings = array(
+			'filenameVarDelimiter' => '_',
+			'templateVarDelimiter' => '_',
+			'templateBasePath'     => '../templates/plugin/',
+			'scratchPath'          => '../temp/',
 		);
 
 		if ($this->_validate())
@@ -54,16 +62,15 @@ class Generator {
 
 	private function _generate()
 	{
-		$templateBasePath = '../templates/plugin/';
-		$scratchPath      = '../temp/';
-		$lcName           = strtolower($this->_vars['_basename_']);
+		$templateBasePath = $this->_settings['templateBasePath'];
+		$scratchPath      = $this->_settings['scratchPath'];
+		$lcName           = strtolower($this->_vars['basename']);
 		$zipFilePath      = $scratchPath.$lcName.'-craft-plugin.zip';
 
 		$zip = new ZipArchive;
 
 		if ($result = $zip->open($zipFilePath, ZipArchive::CREATE) === TRUE)
 		{
-
 			$it = new RecursiveDirectoryIterator($templateBasePath);
 
 			foreach(new RecursiveIteratorIterator($it) as $file)
@@ -73,12 +80,11 @@ class Generator {
 					$zipPath = (basename($file) !== 'README.md') ? $lcName.'-craft-plugin/'.$lcName.'/' : $lcName.'-craft-plugin/';
 
 					$zipFilename = str_replace($templateBasePath, $zipPath, $file);
-					$zipFilename = str_replace('_basename_', $this->_vars['_basename_'], $zipFilename);
+					$zipFilename = str_replace($this->_settings['filenameVarDelimiter'].'basename'.$this->_settings['filenameVarDelimiter'], $this->_vars['basename'], $zipFilename);
 
-					$zipFileContents = file_get_contents($file);
-					$zipFileContents = str_replace(array_keys($this->_vars), array_values($this->_vars), $zipFileContents);
-					
-					$zip->addFromString($zipFilename, $zipFileContents);
+					$renderedTemplate = $this->_replaceVars(file_get_contents($file), $this->_vars);
+										
+					$zip->addFromString($zipFilename, $renderedTemplate);
 				}
 
 			}
@@ -110,6 +116,25 @@ class Generator {
 		{
 			echo 'failed: '.$result;
 		}
+	}
+
+
+	function _replaceFilename($filename)
+	{
+		// TODO: write
+	}
+
+
+	function _replaceVars($template = '', $vars = array())
+	{
+		$placeholders = array_keys($vars);
+		$values       = array_values($vars);
+
+		for ($i=0; $i < sizeof($placeholders); $i++) { 
+			$placeholders[$i] = $this->_settings['templateVarDelimiter'].$placeholders[$i].$this->_settings['templateVarDelimiter'];
+		}
+
+		return str_replace($placeholders, $values, $template);
 	}
 
 }
