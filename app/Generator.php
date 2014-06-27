@@ -2,18 +2,13 @@
 
 class Generator {
 
-	private $_vars     = array();
-	private $_options  = array();
-	private $_settings = array();
+	private $_vars       = array();
+	private $_options    = array();
+	private $_settings   = array();
 
 	public $errors = array();
 
 	public function __construct()
-	{
-
-	}
-
-	public function go()
 	{
 		$this->_vars = array(
 			'basename'  => filter_input(INPUT_POST, 'pluginName'),
@@ -24,12 +19,74 @@ class Generator {
 		);
 
 		$this->_options = array(
-			'hasControllers'  => true,
-			'hasServices'     => true,
-			'hasVariables'    => true,
-			'hasFieldTypes'   => true,
-			'hasCpSection'    => true,
-			'includeComments' => true
+			'default' => array(
+				'included' => true,
+				'files'    => array(
+					'README.md',
+					'(.*)Plugin.php'
+				)
+			),
+			'hasVariables' => array(
+				'included' => true,
+				'files'    => array(
+					'variables/(.*)Variable.php'
+				)
+			),
+			'hasServices' => array(
+				'included' => true,
+				'files'    => array(
+					'services/(.*)Service.php'
+				)
+			),
+			'hasModels' => array(
+				'included' => true,
+				'files'    => array(
+					'models/(.*)Model.php'
+				)
+			),
+			'hasEvents' => array(
+				'included' => true,
+				'files'    => array(
+					'events/(.*)Event.php'
+				)
+			),
+			'hasControllers' => array(
+				'included' => true,
+				'files'    => array(
+					'controllers/(.*)Controller.php'
+				)
+			),
+			'hasRecords' => array(
+				'included' => true,
+				'files'    => array(
+					'records/(.*)_BaseRecord.php'
+				)
+			),
+			'hasWidgets' => array(
+				'included' => true,
+				'files'    => array(
+					'widgets/(.*)_DefaultWidget.php',
+					'templates/_widgets'
+				)
+			),
+			'hasFieldTypes' => array(
+				'included' => true,
+				'files'    => array(
+					'fieldtypes/(.*)_DefaultFieldType.php',
+					'templates/_fields',
+					'resources/css/(.*)Field.less',
+					'resources/css/(.*)Field.css',
+					'resources/js/(.*)Field.js'
+				)
+			),
+			'hasTwigExtensions' => array(
+				'included' => true,
+				'files'    => array(
+					'twigextensions/(.*)TwigExtension.php'
+				)
+			),
+			'hasCpSection'      => true,
+			'includeComments'   => true
 		);
 
 		$this->_settings = array(
@@ -38,7 +95,10 @@ class Generator {
 			'templateBasePath'     => '../templates/plugin/',
 			'scratchPath'          => '../temp/',
 		);
+	}
 
+	public function go()
+	{
 		if ($this->_validate())
 			$this->_generate();
 	}
@@ -115,6 +175,12 @@ class Generator {
 		{
 			echo 'failed: '.$result;
 		}
+	}
+
+
+	function _getFileSet($setName = 'all')
+	{
+
 	}
 
 
