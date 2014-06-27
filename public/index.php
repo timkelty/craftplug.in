@@ -94,6 +94,10 @@ if ( ! empty($_POST))
 					<p class="tip">Want to add your own field type(s) that can be used for entry fields?</p>
 				</div>
 				<div class="control-group">
+					<label><input type="checkbox" name="hasTwigExtensions"> Twig Extensions</label>
+					<p class="tip">Will you be adding new extensions for Twig?</p>
+				</div>
+				<div class="control-group">
 					<label><input type="checkbox" name="hasCpSection"> Control Panel</label>
 					<p class="tip">Will your plugin have its own section and UI in the control panel?</p>
 				</div>
