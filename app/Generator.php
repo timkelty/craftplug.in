@@ -6,6 +6,8 @@ class Generator {
 	private $_options  = array();
 	private $_settings = array();
 
+	public $errors = array();
+
 	public function __construct()
 	{
 
@@ -53,7 +55,7 @@ class Generator {
 		{
 			if ( empty($value) )
 			{
-				echo $key.' is required.';
+				$this->errors[] = $key.' is required';
 				$isValid = false;
 			}
 		}
@@ -78,16 +80,12 @@ class Generator {
 			{
 				if ( ! $it->isDot() && is_file($file))
 				{
-					$zipPath = (basename($file) !== 'README.md') ? $lcName.'-craft-plugin/'.$lcName.'/' : $lcName.'-craft-plugin/';
-
-					$zipFilename = str_replace($templateBasePath, $zipPath, $file);
-					$zipFilename = str_replace($this->_settings['filenameVarDelimiter'].'basename'.$this->_settings['filenameVarDelimiter'], $this->_vars['basename'], $zipFilename);
-
+					$zipPath          = (basename($file) !== 'README.md') ? $lcName.'-craft-plugin/'.$lcName.'/' : $lcName.'-craft-plugin/';
+					$zipFilename      = $this->_replaceFilename(str_replace($templateBasePath, $zipPath, $file));
 					$renderedTemplate = $this->_replaceVars(file_get_contents($file), $this->_vars);
 										
 					$zip->addFromString($zipFilename, $renderedTemplate);
 				}
-
 			}
 
 			$zip->close();
@@ -122,7 +120,7 @@ class Generator {
 
 	function _replaceFilename($filename)
 	{
-		// TODO: write
+		return str_replace($this->_settings['filenameVarDelimiter'].'basename'.$this->_settings['filenameVarDelimiter'], $this->_vars['basename'], $filename);
 	}
 
 

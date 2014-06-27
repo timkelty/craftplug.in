@@ -36,6 +36,9 @@ if ( ! empty($_POST))
 	label {font-size:0.9em;color:#666;}
 	p.tip {color:#999;font-size:0.7em;margin:0.2em 0 0.2em 1.4em;}
 	.control-group {margin:0.6em 0;clear:both;overflow:hidden;}
+	.error {background: #d9aaa0;border-radius: 3px;overflow:hidden;padding:1em;margin-bottom:1em;}
+	.error ul {margin-left:1em;}
+	.error ul li {font-size: 0.8em;}
 	</style>
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -54,6 +57,16 @@ if ( ! empty($_POST))
 		<h1>Craft Plugin Generator</h1>
 
 		<p style="color: #888;">Get a jump start on your plugin development with this little package generator.</p>
+
+		<?php if ( ! empty($g->errors)): ?>
+		<div class="error">
+			<ul>
+				<?php foreach ($g->errors as $error): ?>
+					<li><?php echo $error; ?></li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+		<?php endif; ?>
 
 		<form action="" method="post">
 			
