@@ -74,7 +74,7 @@ if ( ! empty($_POST))
 					<p class="tip">Most plugins will use services.</p>
 				</div>
 				<div class="control-group">
-					<label><input type="checkbox" name="hasServices"> Models [<a href="http://buildwithcraft.com/docs/plugins/models" target="_blank">?</a>]</label>
+					<label><input type="checkbox" name="hasModels"> Models [<a href="http://buildwithcraft.com/docs/plugins/models" target="_blank">?</a>]</label>
 					<p class="tip">If you'll be storing data, you'll want containers for it.</p>
 				</div>
 				<div class="control-group">
@@ -82,11 +82,11 @@ if ( ! empty($_POST))
 					<p class="tip">Plugins with webhooks or other types of system tie-ins will probably utilize controllers.</p>
 				</div>
 				<div class="control-group">
-					<label><input type="checkbox" name="hasControllers"> Records [<a href="http://buildwithcraft.com/docs/plugins/records" target="_blank">?</a>]</label>
+					<label><input type="checkbox" name="hasRecords"> Records [<a href="http://buildwithcraft.com/docs/plugins/records" target="_blank">?</a>]</label>
 					<p class="tip">Records are like models with a database layer.</p>
 				</div>
 				<div class="control-group">
-					<label><input type="checkbox" name="hasControllers"> Dashboard Widgets [<a href="http://buildwithcraft.com/docs/plugins/widgets" target="_blank">?</a>]</label>
+					<label><input type="checkbox" name="hasWidgets"> Dashboard Widgets [<a href="http://buildwithcraft.com/docs/plugins/widgets" target="_blank">?</a>]</label>
 					<p class="tip">Will you be making a widget available for use on the dashboard?</p>
 				</div>
 				<div class="control-group">
