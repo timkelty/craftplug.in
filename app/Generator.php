@@ -15,6 +15,7 @@ class Generator {
 	{
 		$this->_vars = array(
 			'basename'  => filter_input(INPUT_POST, 'pluginName'),
+			'lowername' => strtolower(filter_input(INPUT_POST, 'pluginName')),
 			'version'   => filter_input(INPUT_POST, 'pluginVersion'),
 			'developer' => filter_input(INPUT_POST, 'pluginAuthor'),
 			'url'       => filter_input(INPUT_POST, 'pluginUrl')
@@ -64,7 +65,7 @@ class Generator {
 	{
 		$templateBasePath = $this->_settings['templateBasePath'];
 		$scratchPath      = $this->_settings['scratchPath'];
-		$lcName           = strtolower($this->_vars['basename']);
+		$lcName           = $this->_vars['lowername'];
 		$zipFilePath      = $scratchPath.$lcName.'-craft-plugin.zip';
 
 		$zip = new ZipArchive;
